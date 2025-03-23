@@ -1,9 +1,13 @@
 package com.example.rdsspringbootsample;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.InetAddress;
 
 @RestController
 public class AppController {
@@ -16,7 +20,12 @@ public class AppController {
 
   @GetMapping("health")
   public ResponseEntity<String> healthCheck() {
-    return ResponseEntity.ok().body("Success Health Check");
+    try {
+      String privateIp = InetAddress.getLocalHost().getHostAddress();
+      return ResponseEntity.ok().body(privateIp + " / Success Health Check");
+    } catch (UnknownHostException e) {
+      return ResponseEntity.ok().body("Unknown Host");
+    }
   }
 
   @GetMapping("boards")
